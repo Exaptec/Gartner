@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.I
         detailFragment= (DetailFragment) fragmentManager.findFragmentById(R.id.detail_fragment_container);
 
         if(detailFragment!=null){
-            detailFragment.updateText(sessionText);
+//            detailFragment.updateText(sessionText);
         }
     }
 }

@@ -3,12 +3,23 @@ package au.com.exaptec.gartner.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import au.com.exaptec.gartner.R;
+import au.com.exaptec.gartner.adapter.RecyclerViewRecyclerAdapter;
+import au.com.exaptec.gartner.dagger.GartnerApplication;
+import au.com.exaptec.gartner.model.DataSource;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -18,9 +29,12 @@ import butterknife.ButterKnife;
 
 public class DetailFragment extends Fragment {
 
-    private String title;
-    @BindView(R.id.title_text)
-    TextView titleText;
+    @Inject
+    DataSource dataSource;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,14 +44,22 @@ public class DetailFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        ((GartnerApplication) (getContext().getApplicationContext())).getAppComponent().inject(this);
+        dataSource.setMorningsessionList();
+        recyclerView.setAdapter(new RecyclerViewRecyclerAdapter(dataSource.getMorningSessionQuestions()));
+
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view= inflater.inflate(R.layout.fragment_detail,container,false);
-        ButterKnife.bind(this,view);
+        View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
+        ButterKnife.bind(this, view);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), 0));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+       // Log.d("data", data.get(0));
         return view;
     }
 
@@ -47,7 +69,11 @@ public class DetailFragment extends Fragment {
     }
 
 
-    public void updateText( String text){
-        titleText.setText(text);
-    }
+  /*  public void updateText( String text){
+
+        ArrayList<String> keyList=dataSource.getmorningSessionList();
+        list.setAdapter(new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_activated_1, keyList));
+
+    }*/
 }

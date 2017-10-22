@@ -1,5 +1,7 @@
 package au.com.exaptec.gartner.dagger;
 
+import android.content.Context;
+
 import javax.inject.Singleton;
 
 import au.com.exaptec.gartner.model.DataSource;

@@ -2,6 +2,7 @@ package au.com.exaptec.gartner.dagger;
 
 import javax.inject.Singleton;
 
+import au.com.exaptec.gartner.ui.DetailFragment;
 import au.com.exaptec.gartner.ui.MainActivity;
 import au.com.exaptec.gartner.ui.OptionsFragment;
 import dagger.Component;
@@ -15,6 +16,7 @@ public interface AppComponent {
 
 
     void inject(OptionsFragment fragment);
+    void inject(DetailFragment fragment);
 
     void inject(MainActivity activity);
 }
