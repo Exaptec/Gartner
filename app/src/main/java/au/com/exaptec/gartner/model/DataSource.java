@@ -1,37 +1,23 @@
 package au.com.exaptec.gartner.model;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
-
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-
-import au.com.exaptec.gartner.ui.MainActivity;
 
 /**
  * Created by sai on 15/10/2017.
  */
 
 public class DataSource {
-    Context mcontext;
-    SharedPreferences msharedPrefernces;
 
 
+    public static final String MORNINGSESSION = "MorningSession";
+    public static final String AFTERNOONSESSION = "AfternoonSession";
+    public static final String EVENINGSESSION = "EveningSession";
     ArrayList<String> MorningSessionQuestions = new ArrayList<>();
     ArrayList<String> MorningSessionAnswers = new ArrayList<>();
     ArrayList<String> AfternoonSessionQuestions = new ArrayList<>();
     ArrayList<String> AfternoonSessionAnswers = new ArrayList<>();
     ArrayList<String> EveningSessionQuestions = new ArrayList<>();
     ArrayList<String> EveningSessionAnswers = new ArrayList<>();
-    public static String MORNINGSESSION = "MorningSession";
-    public static String AFTERNOONSESSION = "AfternoonSession";
-    public static String EVENINGSESSION = "EveningSession";
-
     /* public DataSource(Context context)
      {
          mcontext=context;
@@ -40,9 +26,9 @@ public class DataSource {
 
     public void optionListData() {
         optionsList = new ArrayList<>();
-        optionsList.add("Morning Session");
-        optionsList.add("Lunch Session");
-        optionsList.add("Afternoon Session");
+        optionsList.add(MORNINGSESSION);
+        /*optionsList.add(AFTERNOONSESSION);
+        optionsList.add(EVENINGSESSION);*/
     }
 
     public ArrayList<String> getOptionsList() {

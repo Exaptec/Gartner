@@ -2,7 +2,6 @@ package au.com.exaptec.gartner.adapter;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -19,20 +18,23 @@ import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 import com.github.aakira.expandablelayout.Utils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import au.com.exaptec.gartner.R;
+import au.com.exaptec.gartner.ui.MainActivity;
 
 
 public class RecyclerViewRecyclerAdapter extends RecyclerView.Adapter<RecyclerViewRecyclerAdapter.ViewHolder> {
 public static  final String TAG=RecyclerViewRecyclerAdapter.class.getSimpleName();
     private final ArrayList<String> data;
+    private final ArrayList<String> dataAnswers;
+    private MainActivity mActivity;
     private Context context;
     private SparseBooleanArray expandState = new SparseBooleanArray();
 
-
-    public RecyclerViewRecyclerAdapter(final ArrayList<String> data) {
+    public RecyclerViewRecyclerAdapter(final ArrayList<String> data, final ArrayList<String> dataAnswers, MainActivity mActivity) {
         this.data = data;
+        this.dataAnswers = dataAnswers;
+        this.mActivity = mActivity;
         for (int i = 0; i < data.size(); i++) {
             expandState.append(i, false);
         }
@@ -69,7 +71,7 @@ public static  final String TAG=RecyclerViewRecyclerAdapter.class.getSimpleName(
         });
 
         holder.buttonLayout.setRotation(expandState.get(position) ? 180f : 0f);
-        holder.buttonLayout.setOnClickListener(new View.OnClickListener() {
+        holder.textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
 
@@ -78,14 +80,28 @@ public static  final String TAG=RecyclerViewRecyclerAdapter.class.getSimpleName(
         });
     }
 
-    private void onClickButton(final ExpandableLayout expandableLayout,final TextView answer, final int position) {
+    private void onClickButton(final ExpandableLayout expandableLayout, final TextView answer_tv, final int position) {
         expandableLayout.toggle();
-
+        String answer = dataAnswers.get(position);
+        mActivity.speakQuestion(answer);
+        answer_tv.setText(answer);
     }
 
     @Override
     public int getItemCount() {
         return data.size();
+    }
+
+    public ObjectAnimator createRotateAnimator(final View target, final float from, final float to) {
+        ObjectAnimator animator = ObjectAnimator.ofFloat(target, "rotation", from, to);
+        animator.setDuration(300);
+        animator.setInterpolator(Utils.createInterpolator(Utils.LINEAR_INTERPOLATOR));
+        return animator;
+    }
+
+    public interface RobotSpeak {
+        public void speakQuestion(String session);
+
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -105,12 +121,5 @@ public static  final String TAG=RecyclerViewRecyclerAdapter.class.getSimpleName(
             expandableLayout = (ExpandableLinearLayout) v.findViewById(R.id.expandableLayout);
             answer=(TextView) v.findViewById(R.id.textView_answer);
         }
-    }
-
-    public ObjectAnimator createRotateAnimator(final View target, final float from, final float to) {
-        ObjectAnimator animator = ObjectAnimator.ofFloat(target, "rotation", from, to);
-        animator.setDuration(300);
-        animator.setInterpolator(Utils.createInterpolator(Utils.LINEAR_INTERPOLATOR));
-        return animator;
     }
 }

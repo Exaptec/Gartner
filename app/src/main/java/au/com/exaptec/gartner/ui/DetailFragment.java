@@ -1,16 +1,15 @@
 package au.com.exaptec.gartner.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 
@@ -34,7 +33,15 @@ public class DetailFragment extends Fragment {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
+    private ArrayList<String> dataQuestions;
+    private ArrayList<String> dataAnswers;
+    private MainActivity mainActivity;
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mainActivity = (MainActivity) context;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,7 +53,7 @@ public class DetailFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         ((GartnerApplication) (getContext().getApplicationContext())).getAppComponent().inject(this);
         dataSource.setMorningsessionList();
-        recyclerView.setAdapter(new RecyclerViewRecyclerAdapter(dataSource.getMorningSessionQuestions()));
+        /*recyclerView.setAdapter(new RecyclerViewRecyclerAdapter(dataSource.getMorningSessionQuestions()));*/
 
     }
 
@@ -59,13 +66,36 @@ public class DetailFragment extends Fragment {
         recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), 0));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-       // Log.d("data", data.get(0));
+        // Log.d("data", data.get(0));
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    public void updateLists(String sessionText) {
+        intialiseLists(sessionText);
+        recyclerView.swapAdapter(new RecyclerViewRecyclerAdapter(dataQuestions, dataAnswers, mainActivity), true);
+
+    }
+
+    private void intialiseLists(String sessionText) {
+
+        switch (sessionText) {
+            case DataSource.MORNINGSESSION:
+                dataQuestions = dataSource.getMorningSessionQuestions();
+                dataAnswers = dataSource.getMorningSessionAnswers();
+                break;
+            case DataSource.AFTERNOONSESSION:
+                dataQuestions = dataSource.getMorningSessionQuestions();
+                dataAnswers = dataSource.getMorningSessionAnswers();
+                break;
+            default:
+                dataQuestions = dataSource.getMorningSessionQuestions();
+                dataAnswers = dataSource.getMorningSessionAnswers();
+        }
     }
 
 
